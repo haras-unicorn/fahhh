@@ -1,0 +1,6 @@
+[book]
+authors = ["haras-unicorn"]
+language = "en"
+multilingual = false
+src = "."
+title = "fahhh"

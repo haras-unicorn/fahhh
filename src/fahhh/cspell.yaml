@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/streetsidesoftware/cspell/refs/heads/main/cspell.schema.json
+useGitignore: true
+version: "0.2"
+language: en
+words:
+  - schemars
+  - thiserror
+  - testcontainers
+  - reqwest
+  - yescrypt
+  - keypair
+  - shamir
+  - hostnames
+  - keygen
+  - mkpasswd
+  - emojis
+  - genkey
+  - genpkey
+  - pkeyopt
+  - paramgen
+  - acreateserial
+  - extfile
+  - keyid
+  - diffie
+  - chrono
+  - clearenv
+  - tmpfs
+  - chdir
+  - libargon

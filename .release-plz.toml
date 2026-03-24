@@ -1,0 +1,3 @@
+[[package]]
+name = "fahhh"
+changelog_path = "./CHANGELOG.md"

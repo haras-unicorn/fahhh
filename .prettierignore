@@ -1,0 +1,3 @@
+*.lock
+assets/schema.json
+CHANGELOG.md

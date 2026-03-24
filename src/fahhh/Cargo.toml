@@ -1,0 +1,9 @@
+[package]
+name = "fahhh"
+version = "0.1.0"
+description = "Software soundboard"
+repository = "https://github.com/haras-unicorn/fahhh"
+authors = ["haras-unicorn <github@haras-unicorn.net>"]
+license-file = "../../LICENSE.md"
+readme = "../../README.md"
+edition = "2024"
