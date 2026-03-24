@@ -23,7 +23,7 @@ jobs:
           name: haras
           authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
       - run: |
-          nix build --show-trace '.#unwrapped'
+          nix build --show-trace '.#'
           mkdir -p release
           cp -L result/bin/fahhh release/fahhh-${{ matrix.arch }}
           tar -czf fahhh-${{ matrix.arch }}.tar.gz -C release fahhh-${{ matrix.arch }}
