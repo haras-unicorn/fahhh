@@ -74,46 +74,57 @@ rec {
                 '';
               };
 
-              mkBuildInputs =
-                pkgs: with pkgs; [
-                ];
+              env =
+                let
+                  llvmPackages = pkgs.llvmPackages;
+                  libclang = llvmPackages.libclang;
+                in
+                {
+                  LIBCLANG_PATH = "${libclang.lib}/lib";
+                  BINDGEN_EXTRA_CLANG_ARGS = "-isystem ${pkgs.glibc.dev}/include";
+                };
 
-              buildInputs = mkBuildInputs pkgs;
+              nativeBuildInputs = with pkgs; [
+                pkg-config
+              ];
 
-              externalPackages =
-                with pkgs;
-                [
-                  nil
-                  nixfmt-rfc-style
+              buildInputs = with pkgs; [
+                gtk4
+                alsa-lib
+                pipewire
+              ];
 
-                  rustc
-                  cargo
+              externalPackages = with pkgs; [
+                nil
+                nixfmt-rfc-style
 
-                  markdownlint-cli
-                  nodePackages.markdown-link-check
-                  marksman
+                rustc
+                cargo
 
-                  nodePackages.cspell
+                markdownlint-cli
+                nodePackages.markdown-link-check
+                marksman
 
-                  mdbook
-                  nodePackages.prettier
-                  nodePackages.vscode-langservers-extracted
-                  nodePackages.prettier
-                  nodePackages.yaml-language-server
-                  taplo
+                nodePackages.cspell
 
-                  fd
-                  cachix
+                mdbook
+                nodePackages.prettier
+                nodePackages.vscode-langservers-extracted
+                nodePackages.prettier
+                nodePackages.yaml-language-server
+                taplo
 
-                  release-plz
-                ]
-                ++ buildInputs;
+                fd
+                cachix
+
+                release-plz
+              ];
 
               scripts = {
                 run = ''
                   cd "$(flake-root)"
 
-                  cargo run --bin ${name}
+                  dbus-run-session -- cargo run --bin ${name}
                 '';
                 format = ''
                   cd "$(flake-root)"
@@ -175,7 +186,7 @@ rec {
                       cargoToml = builtins.fromTOML (builtins.readFile (lib.path.append root "src/${name}/Cargo.toml"));
                     in
                     {
-                      inherit buildInputs;
+                      inherit buildInputs nativeBuildInputs;
                       src = root;
                       cargoBuildOptions =
                         prev:
@@ -187,6 +198,7 @@ rec {
                       name = cargoToml.package.name;
                       version = cargoToml.package.version;
                     }
+                    // env
                   );
 
                   docs =
@@ -220,9 +232,13 @@ rec {
                   ${name} = app;
                 };
 
-              devShells.default = pkgs.mkShell {
-                packages = externalPackages ++ scriptPackages;
-              };
+              devShells.default = pkgs.mkShell (
+                {
+                  inherit buildInputs nativeBuildInputs;
+                  packages = externalPackages ++ scriptPackages;
+                }
+                // env
+              );
 
               checks.default =
                 pkgs.runCommand "${name}-checks-default"
